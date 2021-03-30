@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 
+/* CADASTRO POR CAMPANHA (Cada produto é uma campanha)*/
 (async () => {
     const arquivo = 
 ``.split('\n')
