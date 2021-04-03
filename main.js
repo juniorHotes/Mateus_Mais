@@ -19,15 +19,15 @@ async function main() {
     //#endregion LOGIN
 
     const dataCampanha = {
-        nome_campanha: 'LANÇAMENTO-EBD-02',
-        desc_campanha: 'Oferta válida para compras realizadas por pessoas físicas, com limite de R$ 6,00 por CPF, nas lojas Mateus Supermercados, Mix Atacarejo e Camiño em São Luís-Ma. Vigente de 05/04/2021 a 11/04/2021 ou enquanto durarem os estoques.',
+        nome_campanha: 'LANÇAMENTO-NIVEA-02',
+        desc_campanha: 'Oferta válida para compras realizadas por pessoas físicas, com limite de R$ 100,00 por CPF, nas lojas Mateus Supermercados, Mix Atacarejo e Camiño em São Luís-Ma. Vigente de 05/04/2021 a 11/04/2021 ou enquanto durarem os estoques.',
         inicio_campanha: '05/04/2021',
         fim_campanha: '11/04/2021',
         num_dias_credito: '90',
-        vlr_maximo_campanha: '4,500,00',
-        vlr_maximo_cpf: '6,00',
+        vlr_maximo_campanha: '30,000,00',
+        vlr_maximo_cpf: '100,00',
         num_dias_provisao: '7',
-        des_codigo_referencia: 'EBD-TRADE-LANÇAMENTO',
+        des_codigo_referencia: 'NIVEA-TRADE-LANÇAMENTO',
     }
 
     // await page.waitForNavigation()
@@ -36,20 +36,46 @@ async function main() {
     await RegisterCampaign.Register(page, dataCampanha);
 
     const produtos =
-`7891079013038|Macarrão Instantâneo Galinha Caipira Nissin 69g|1|R$ 1,75
-7891079013052|Macarrão Instantâneo Carne Defumada Nissin 69g |1|R$ 1,75
-7891079013083|Macarrão Instantâneo Costela Nissin 68g|1|R$ 1,75
-7891079013106|Macarrão Instantâneo Yakissoba Tradicional 70g|1|R$ 1,75
-7891079013120|Macarrão Instantâneo Bolonhesa Nissin Copo 72g|1|R$ 1,75
-7891079013113|Macarrão Instantâneo Queijo Cheddar Nissin 69g|1|R$ 1,75
-7891079013045|Macarrão Instantâneo Frango com Molho Teriyaki 72g|1|R$ 1,75
-7891079013076|Macarrão Instantâneo Frutos do Mar Nissin Copo 65g|1|R$ 1,75
-7891079013069|Macarrão Instantâneo Galinha Caipira Picante 68g|1|R$ 1,75
-7891079013090|Macarrão Instantâneo Legumes com Azeite Nissin 67g|1|R$ 1,75
-7891079013427|Macarrão Instantâneo Curry Nisiin Copo 70g|1|R$ 1,75`.split('\n')
+`4005900219626|Sabonete Líquido Íntimo Nivea Fresh Comfort 250ml|2|20
+7890704810516|Sabonete Líquido Íntimo Suave Nivea Frasco 250ml|2|20
+7890704808131|Sabonete Líquido Íntimo Natural Nivea Frasco 250ml|2|20
+4005900473806|Mousse de Banho Nivea Creme Care Frasco 200ml|2|20
+4005808513550|Sabonete Líquido Suave Nivea Creme Soft 250ml|2|20
+7890704810738|Sabonete Líquido Erva-Doce Nivea Frasco 250ml|2|20
+4005900160195|Sabonete Líquido Nivea Creme Soft Milk 250ml|2|20
+4005900095268|Sabonete Líquido Nivea Creme Care Frasco 250ml|2|20
+4005808808243|Esfoliante para Banho Corporal Nivea Bisnaga 200ml|1|20
+4005808808281|Sabonete Líquido Nivea Óleo de Banho Frasco 200ml|1|20
+4005808896134|Sabonete Líquido Frangipani & Oil Nivea 250ml|2|20
+4005808313167|Sabonete Líquido Waterlily & Oil Nivea 250ml|2|20
+4005900734068|Sabonete Líquido Nivea Creme Soft 200ml Refil|2|20
+4005900734082|Sabonete Líquido Nivea Creme Care 200ml Refil|2|20
+4005900734075|Sabonete Líquido Erva-Doce Nivea Sachê 200ml Refil|2|20
+4005900079664|Creme Antirrugas Dia FPS 15 Nivea Q10 Plus C 51g|1|20
+4005808812875|Creme Antissinais Pele Normal a Seca FPS 30 52g|1|20
+4005808174478|Creme Antissinais Pele Mista a Oleosa FPS 30 52g|1|20
+4005808812899|Creme Antissinais Noite Nivea Q10 Plus Caixa 50g|1|20
+4005900418777|Creme Antissinais Contorno dos Olhos Nivea 15g|1|20
+78906617|Creme Hidratante Nivea Lata 56g|1|20
+7891177801308|Creme Hidratante Nivea Pote 97g|1|20
+4005900359261|Água Micelar Solução de Limpeza Nivea Micellair|1|20
+4005900539724|Água Micelar Expert sem Perfume Micellair 200ml|1|20
+4005900707550|Antitranspirante Aerossol Citrus 150ml|1|20
+4005900707536|Antitranspirante Aerossol Carvão Ativado 150ml|1|20
+4005900707543|Antitranspirante Aerossol Amadeirado 150ml|1|20
+4005900715821|Antitranspirante Aerossol Fresh Deomilk 150ml|1|20
+4005900715814|Antitranspirante Aerossol Sensitive Nivea Deomilk|1|20
+4005900715838|Antitranspirante Aerossol Toque Seco Nivea Deomilk|1|20
+4005900453259|Protetor Labial Nivea Amora Shine 4,8g|1|20
+4005808369621|Protetor Med Repair Labial FPS 15 Blister 4,8g|1|20
+4005808934980|Protetor Labial Melancia Shine Nivea Blister 4,8g|1|20
+4005900663993|Protetor Labial Cereja Shine Nivea Blister 4,8g|1|20
+4005900664006|Protetor Labial Pérola Shine Nivea Blister 4,8g|1|20
+4005808850839|Protetor Labial Morango Shine Nivea Blister 4,8g|1|20`.split('\n')
 
     async function restart() {
         const snakModal = await page.$('div.cdk-overlay-container div.cdk-global-overlay-wrapper div.cdk-overlay-pane snack-bar-container')
+
         if (snakModal != null) {
             const msg = await page.$eval('.cdk-visually-hidden[aria-atomic="true"][aria-live="assertive"]', text => text.innerText)
 
@@ -137,12 +163,12 @@ async function main() {
                     page.click('dropzone'),
                 ])
 
-                await fileChooser.accept([`C:/Users/Junior/Documents/MEGAsync Downloads/Mateus Mais/Imagens/${produto[0]}.png`])
+                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/Imagens/${produto[0]}.png`])
                     .then()
                     .catch(async () => {
                         noImage.push(produto[0])
                         console.log(' @@@@@@@@@@@@@@@@@@@@ IMAGEM NÃO ENCONTRADA @@@@@@@@@@@@@@@@@@@@ ')
-                        await page.click('app-new-product mat-dialog-content div button:nth-child(2)')
+                        await page.click('mat-dialog-container app-edit-product mat-dialog-content div button')
                         await restart()
 
                     });
@@ -157,10 +183,10 @@ async function main() {
                 await page.type("[formcontrolname='qtd_receber_cashback']", produto[2])
 
                 /*################################## SE FOR NO DINHEIRO ############################################*/
-                await page.waitForTimeout(500)
-                await page.click("div div.mat-select-arrow-wrapper")
-                await page.waitForTimeout(500)
-                await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                // await page.waitForTimeout(500)
+                // await page.click("div div.mat-select-arrow-wrapper")
+                // await page.waitForTimeout(500)
+                // await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
                 //####################################################################################################
 
                 // Cashback
