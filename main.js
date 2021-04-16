@@ -54,10 +54,10 @@ async function main() {
         des_codigo_referencia: campanha[8],
     }
 
-    // await page.waitForNavigation()
-    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=8672')
+    await page.waitForNavigation()
+    await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=8808')
 
-    await RegisterCampaign.Register(page, dataCampanha);
+    // await RegisterCampaign.Register(page, dataCampanha);
 
     dataFile.shift()
     const produtos = dataFile
@@ -132,7 +132,7 @@ async function main() {
 
     let noImage = []
     // //#region CADASTRAR NOVO PRODUTO
-    let index = 0
+    let index = 161
     async function start() {
 
         const produto = produtos[index]
@@ -152,7 +152,7 @@ async function main() {
                     page.click('dropzone'),
                 ])
 
-                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/Ambev/Nova pasta/ambev/${produto[0]}.png`])
+                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/Restaurante/imagens/${produto[0]}.png`])
                     .then()
                     .catch(async () => {
                         noImage.push(produto[0])
@@ -162,7 +162,7 @@ async function main() {
 
                     });
 
-                await page.waitForTimeout(1500)
+                await page.waitForTimeout(2000)
                 // Nome do produto
                 await page.type("[formcontrolname='des_ean_plu']", produto[1])
                 await page.waitForTimeout(1000)
@@ -171,11 +171,15 @@ async function main() {
                 // Quantidade
                 await page.type("[formcontrolname='qtd_receber_cashback']", produto[2])
 
+
                 /*################################## SE FOR NO DINHEIRO ############################################*/
-                // await page.waitForTimeout(500)
-                // await page.click("div div.mat-select-arrow-wrapper")
-                // await page.waitForTimeout(500)
-                // await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                const cashbackType = produto[3].indexOf('R$')
+                if (cashbackType != -1) {
+                    await page.waitForTimeout(500)
+                    await page.click("div div.mat-select-arrow-wrapper")
+                    await page.waitForTimeout(500)
+                    await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                }
                 //####################################################################################################
 
                 // Cashback
