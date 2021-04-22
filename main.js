@@ -6,6 +6,7 @@ const RegisterCampaign = require('./classes/RegisterCampaign');
 /* CADASTRO CAMPANHA E PRODUTOS (Cria uma campanha para vários produtos)*/
 async function main() {
 
+    //#region Ler Arquivo
     const file = promisify(fs.readFile)
 
     async function readFile() {
@@ -28,10 +29,14 @@ async function main() {
 
     const campanha = dataFile[0]
 
+    //#endregion Ler Arquivo
+
+    //#region Abrir Navegador
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
     await page.goto('https://lojista.izpay.com.br/login')
     page.setDefaultNavigationTimeout(60000)
+    //#endregion Abrir Navegador
 
     //#region LOGIN
     await page.type('[formcontrolname="des_username"]', 'joão_machado1')
@@ -54,10 +59,10 @@ async function main() {
         des_codigo_referencia: campanha[8],
     }
 
-    await page.waitForNavigation()
-    await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=8808')
+    // await page.waitForNavigation()
+    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=8954')
 
-    // await RegisterCampaign.Register(page, dataCampanha);
+    await RegisterCampaign.Register(page, dataCampanha);
 
     dataFile.shift()
     const produtos = dataFile
@@ -132,7 +137,7 @@ async function main() {
 
     let noImage = []
     // //#region CADASTRAR NOVO PRODUTO
-    let index = 161
+    let index = 0
     async function start() {
 
         const produto = produtos[index]
@@ -152,7 +157,7 @@ async function main() {
                     page.click('dropzone'),
                 ])
 
-                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/Restaurante/imagens/${produto[0]}.png`])
+                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/CASH BACK 4/img/${produto[0]}.png`])
                     .then()
                     .catch(async () => {
                         noImage.push(produto[0])
