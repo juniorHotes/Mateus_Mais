@@ -44,14 +44,14 @@ const { promisify } = require('util');
         if (isModal == null) {
             index++
             if (index <= dataFile.length - 1) {
-                console.log("CAMPANHA CADASTRADA")
+                await page.waitForTimeout(2500)
                 await main()
             } else {
 
                 console.log(`
                 ##################################
                 ##################################
-                ###### PRODUTOS CADASTRADOS ######
+                ###### CAMPANHAS CADASTRADOS #####
                 ##################################
                 ##################################`)
 
@@ -67,6 +67,10 @@ const { promisify } = require('util');
         await page.goto('https://lojista.izpay.com.br/campanhas/produtos')
 
         await page.waitForTimeout(2000)
+
+        console.log("--------------------------------------------------")
+        console.log("CADASTRANDO PRODUTO...")
+        console.table({ index: index + 1, CAMPANHA: dataFile[index][0] });
 
         await page.waitForSelector("input[placeholder='Nome da Campanha']")
             .then(async () => {
@@ -116,9 +120,6 @@ const { promisify } = require('util');
                 await page.click("[mat-flat-button]")
 
                 /* ################# CASTRO DO PRODUTO ################# */
-                console.log("--------------------------------------------------")
-                console.log("CADASTRANDO PRODUTO...")
-                console.table({ index: index, CAMPANHA: dataFile[index][0] });
 
                 await page.waitForSelector("campaign-management-product-list div.tab-title.ng-star-inserted div button")
                     .then(async () => await page.click("campaign-management-product-list div.tab-title.ng-star-inserted div button"))
@@ -131,10 +132,11 @@ const { promisify } = require('util');
                             page.click('dropzone'),
                         ])
 
-                        await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/Semana 3/ALL/${dataFile[index][9]}.png`])
+                        await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/CASH BACK 4/img/${dataFile[index][9]}.png`])
                             .then()
                             .catch(async () => {
                                 console.log(' @@@@@@@@@@@@@@@@@@@@ IMAGEM NÃO ENCONTRADA @@@@@@@@@@@@@@@@@@@@ ')
+                                restart()
                                 return
 
                             });
@@ -149,10 +151,13 @@ const { promisify } = require('util');
                         await page.type("[formcontrolname='qtd_receber_cashback']", dataFile[index][11])
 
                         /*################################## SE FOR NO DINHEIRO ############################################*/
-                        await page.waitForTimeout(500)
-                        await page.click("div div.mat-select-arrow-wrapper")
-                        await page.waitForTimeout(500)
-                        await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                        const cashbackType = dataFile[index][12].indexOf('R$')
+                        if (cashbackType != -1) {
+                            await page.waitForTimeout(500)
+                            await page.click("div div.mat-select-arrow-wrapper")
+                            await page.waitForTimeout(500)
+                            await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                        }
                         //####################################################################################################
 
                         // Cashback
