@@ -59,10 +59,10 @@ async function main() {
         des_codigo_referencia: campanha[8],
     }
 
-    // await page.waitForNavigation()
-    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=8970')
+    await page.waitForNavigation()
+    await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=9257')
 
-    await RegisterCampaign.Register(page, dataCampanha);
+    // await RegisterCampaign.Register(page, dataCampanha);
 
     dataFile.shift()
     const produtos = dataFile
@@ -137,7 +137,7 @@ async function main() {
 
     let noImage = []
     // //#region CADASTRAR NOVO PRODUTO
-    let index = 0
+    let index = 54
     async function start() {
 
         const produto = produtos[index]
