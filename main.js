@@ -42,7 +42,7 @@ async function main() {
     await page.type('[formcontrolname="des_username"]', 'joão_machado1')
     await page.click('[type="submit"]')
     await page.waitForTimeout(2000)
-    await page.type('[formcontrolname="des_senha"]', 'WUVI0H')
+    await page.type('[formcontrolname="des_senha"]', 'junior1110')
     await page.waitForTimeout(2000)
     await page.click('[matsteppernext]')
     //#endregion LOGIN
@@ -59,10 +59,10 @@ async function main() {
         des_codigo_referencia: campanha[8],
     }
 
-    await page.waitForNavigation()
-    await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=9257')
+    // await page.waitForNavigation()
+    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=9959')
 
-    // await RegisterCampaign.Register(page, dataCampanha);
+    await RegisterCampaign.Register(page, dataCampanha);
 
     dataFile.shift()
     const produtos = dataFile
@@ -137,7 +137,7 @@ async function main() {
 
     let noImage = []
     // //#region CADASTRAR NOVO PRODUTO
-    let index = 54
+    let index = 0
     async function start() {
 
         const produto = produtos[index]
@@ -157,7 +157,7 @@ async function main() {
                     page.click('dropzone'),
                 ])
 
-                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/CASH BACK 4/img/${produto[0]}.png`])
+                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/imagens/${produto[0]}.png`])
                     .then()
                     .catch(async () => {
                         noImage.push(produto[0])

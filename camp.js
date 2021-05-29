@@ -28,7 +28,7 @@ const { promisify } = require('util');
     await page.type('[formcontrolname="des_username"]', 'joão_machado1')
     await page.click('[type="submit"]')
     await page.waitForTimeout(2000)
-    await page.type('[formcontrolname="des_senha"]', 'WUVI0H')
+    await page.type('[formcontrolname="des_senha"]', 'junior1110')
     await page.waitForTimeout(2000)
     await page.click('[matsteppernext]')
     //#endregion LOGIN
@@ -132,7 +132,7 @@ const { promisify } = require('util');
                             page.click('dropzone'),
                         ])
 
-                        await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/CASH BACK 4/img/${dataFile[index][9]}.png`])
+                        await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/imagens/${dataFile[index][9]}.png`])
                             .then()
                             .catch(async () => {
                                 console.log(' @@@@@@@@@@@@@@@@@@@@ IMAGEM NÃO ENCONTRADA @@@@@@@@@@@@@@@@@@@@ ')
