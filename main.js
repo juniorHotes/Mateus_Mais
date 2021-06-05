@@ -60,7 +60,7 @@ async function main() {
     }
 
     // await page.waitForNavigation()
-    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=10074')
+    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=10100')
 
     await RegisterCampaign.Register(page, dataCampanha);
 
