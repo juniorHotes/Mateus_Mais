@@ -56,11 +56,11 @@ async function main() {
         vlr_maximo_campanha: campanha[5],
         vlr_maximo_cpf: campanha[6],
         num_dias_provisao: campanha[7],
-        des_codigo_referencia: campanha[8],
+        des_codigo_referencia: campanha[8]
     }
 
     // await page.waitForNavigation()
-    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=9959')
+    // await page.goto('https://lojista.izpay.com.br/campanhas/produtos?cod_gestao_campanha=10074')
 
     await RegisterCampaign.Register(page, dataCampanha);
 
@@ -157,7 +157,7 @@ async function main() {
                     page.click('dropzone'),
                 ])
 
-                await fileChooser.accept([`C:/Users/GP Mateus/Desktop/Mateus Mais/imagens/${produto[0]}.png`])
+                await fileChooser.accept([`./img_mateus.jpeg`])
                     .then()
                     .catch(async () => {
                         noImage.push(produto[0])
