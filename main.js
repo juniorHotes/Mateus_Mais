@@ -34,17 +34,16 @@ async function main() {
     //#region Abrir Navegador
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
-    await page.goto('https://lojista.izpay.com.br/login')
+    await page.goto('https://mateus.izio.com.br/login')
     page.setDefaultNavigationTimeout(60000)
     //#endregion Abrir Navegador
 
     //#region LOGIN
-    await page.type('[formcontrolname="des_username"]', 'joão_machado1')
-    await page.click('[type="submit"]')
+    await page.type('[formcontrolname="des_username"]', 'joao.rodrigues')
     await page.waitForTimeout(2000)
-    await page.type('[formcontrolname="des_senha"]', 'junior1110')
+    await page.type('[formcontrolname="des_senha"]', 'senhasenha')
     await page.waitForTimeout(2000)
-    await page.click('[matsteppernext]')
+    await page.click('button[type="submit"]')
     //#endregion LOGIN
 
     const dataCampanha = {
@@ -68,12 +67,12 @@ async function main() {
     const produtos = dataFile
 
     async function restart() {
-        const snakModal = await page.$('div.cdk-overlay-container div.cdk-global-overlay-wrapper div.cdk-overlay-pane snack-bar-container')
+        const snakModal = await page.$('mat-dialog-container.mat-dialog-container')
 
         if (snakModal != null) {
             const msg = await page.$eval('.cdk-visually-hidden[aria-atomic="true"][aria-live="assertive"]', text => text.innerText)
 
-            if (msg == 'A lista de EANs relacionados não pode conter registros duplicados.') {
+            if (msg == 'Para editar os itens a campanha deve estar como rascunho ou falha na ativação') {
                 await page.click('app-new-product mat-dialog-content div button:nth-child(2)')
                 console.log(msg)
             }
@@ -112,11 +111,6 @@ async function main() {
 
                     console.log(`${cadastrados.length} PRODUTOS CADASTRADOS`)
 
-                    if (noImage.length > 0) {
-                        console.log('###### PRODUTOS QUE NÃO FORAM ENCONTRADO IMAGEMS')
-                        noImage.map(ean => console.log(ean))
-                    }
-
                     return
                 }
                 else {
@@ -135,7 +129,6 @@ async function main() {
         }
     }
 
-    let noImage = []
     // //#region CADASTRAR NOVO PRODUTO
     let index = 0
     async function start() {
@@ -158,15 +151,7 @@ async function main() {
                 ])
 
                 await fileChooser.accept([`./img_mateus.jpeg`])
-                    .then()
-                    .catch(async () => {
-                        noImage.push(produto[0])
-                        console.log(' @@@@@@@@@@@@@@@@@@@@ IMAGEM NÃO ENCONTRADA @@@@@@@@@@@@@@@@@@@@ ')
-                        await page.click('mat-dialog-container app-new-product mat-dialog-content div button')
-                        await restart()
-
-                    });
-
+                    
                 await page.waitForTimeout(2000)
                 // Nome do produto
                 await page.type("[formcontrolname='des_ean_plu']", produto[1])
@@ -183,7 +168,7 @@ async function main() {
                     await page.waitForTimeout(500)
                     await page.click("div div.mat-select-arrow-wrapper")
                     await page.waitForTimeout(500)
-                    await page.click("div.mat-select-content.ng-trigger.ng-trigger-fadeInContent mat-option:nth-child(2)")
+                    await page.click("div[role='listbox'] mat-option:nth-child(2)")
                 }
                 //####################################################################################################
 
@@ -194,7 +179,7 @@ async function main() {
                 await page.waitForTimeout(1000)
                 // EAN
                 await page.type("[formcontrolname='cod_ean']", produto[0])
-                await page.click("app-register-item-wrapper div.modal-footer button.iz-button.md.margin-right-16.mat-stroked-button.mat-accent")
+                await page.click("div.modal-footer button.iz-button.md.margin-right-16.mat-stroked-button.mat-accent")
 
                 await restart()
 

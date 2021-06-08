@@ -1,6 +1,19 @@
-class RegisterCampaign {
-    static async Register(page, data) {
+const fs = require('fs');
+const { promisify } = require('util');
 
+class RegisterCampaign {
+    
+    static async Register(page, data) {
+        const file = promisify(fs.readFile)
+
+        async function readFile() {
+            const dataFile = await file('LojasParticipantes.csv', 'UTF-8')
+            const row = dataFile.split('\r\n')
+            return row
+        }
+
+        const LojasParticipantes = await readFile()
+    
         const {
             nome_campanha,
             desc_campanha,
@@ -13,23 +26,35 @@ class RegisterCampaign {
             des_codigo_referencia
         } = await data
 
-        await page.waitForNavigation()
-        await page.goto('https://lojista.izpay.com.br/campanhas/produtos')
+        await page.waitForSelector("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div a")
+        .then(async () => {
+            await page.click("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div a")
+            await page.waitForTimeout(1000)
+            await page.click("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div ul mat-list-item:nth-child(3) div a")
+            await page.waitForTimeout(1000)
+            await page.click("body app-root mat-sidenav-container mat-sidenav-content div app-campaing-page mat-card div button.mat-focus-indicator.button-dark.btn-new-entity.mat-button.mat-button-base.ng-star-inserted")
+            await page.waitForTimeout(1000)
+            await page.click("#opcao-cashback div")
+            await page.waitForTimeout(1000)
+            await page.click("#nova-campanha")
+            await page.waitForTimeout(1000)
+            await page.click("#opcao-produto div")
+            await page.waitForTimeout(1000)
+            await page.click("#nova-campanha")
+            await page.waitForTimeout(1000)
+        })
 
-        await page.waitForTimeout(2000)
 
-        await page.waitForSelector("input[placeholder='Nome da Campanha']")
+        await page.waitForSelector("input[formcontrolname='nom_campanha']")
             .then(async () => {
                 // Nome da campanha
-                await page.type("input[placeholder='Nome da Campanha']", nome_campanha)
-                // Descrição da Campanha
-                await page.type("textarea[placeholder='Descrição da Campanha']", desc_campanha)
+                await page.type("input[formcontrolname='nom_campanha']", nome_campanha)
                 // Início da Campanha
-                await page.type("input[placeholder='Início da Campanha']", inicio_campanha)
+                await page.type("input[formcontrolname='dat_inicio_campanha']", inicio_campanha)
                 // Término da campanha
-                await page.type("input[placeholder='Término da campanha']", fim_campanha)
-                // Público da campanha (todos)
-                await page.click("[formcontrolname='TipoPublico']")
+                await page.type("input[formcontrolname='dat_final_campanha']", fim_campanha)
+                // Descrição da Campanha
+                await page.type("textarea[formcontrolname='des_campanha']", desc_campanha)
                 // Validade do Cashback após o recebimento do crédito
                 await page.type("input[formcontrolname='num_dias_credito']", num_dias_credito)
                 // Valor máximo de investimento
@@ -41,15 +66,21 @@ class RegisterCampaign {
                 // Código de referência
                 await page.type("input[formcontrolname='des_codigo_referencia']", des_codigo_referencia)
 
+                // Público da campanha (todos)
+                await page.click("[formcontrolname='cod_publico']")
+                await page.waitForTimeout(1500)
+                await page.click("div[role='listbox'] mat-option mat-pseudo-checkbox")
+    
+
                 // LOJAS PARTICIPANTES
-                await page.click("[placeholder='Selecione as lojas Participantes']")
+                await page.click("[formcontrolname='cod_lojas']")
                 async function selecionarLojas() {
 
-                    await page.waitForSelector('div.mat-select-content mat-option', { timeout: 15000 }).then(async () => {
-                        await page.$$eval('div.mat-select-content mat-option', el => {
-                            const listaLojas = 'MATEUS SUPERMERCADOS S.A. - ACAILANDIA|MATEUS SUPERMERCADOS S. A. MIX ACAILANDIA|POSTERUS SUPERMERCADOS LTDA- ARARI|MATEUS SUPERMERCADOS SA - MIX BACABAL|MATEUS SUPERMERCADOS S.A. - BALSAS|MATEUS SUPERMERCADOS S.A. - MIX BALSAS|CONVENIERE SUPERMERCADO - CATULO LETRA A|CONVENIERE SUPERMERCADOS - FLORA RICA|CONVENIERE SUPERMERCADOS - POTOSI|MATEUS SUPERMERCADOS S.A. - BARRA DO CORDA|MATEUS SUPERMERCADOS SA- MIX BARRA DO CORDA|POSTERUS SUPERMERCADOS LTDA - BARREIRINHAS|MATEUS SUPERMERCADOS S A SUPER BURITICUPU|POSTERUS SUPERMERCADOS CAROLINA|MATEUS SUPERMERCADOS S.A. - MIX CHAPADINHA|MATEUS SUPERMERCADO S A SUPER CODO|POSTERUS SUPERMERCADOS LTDA - COROATA|POSTERUS SUPERMERCADOS LTDA - ESTREITO|POSTERUS SUPERMERCADOS LTDA GRAJAU|MATEUS SUPERMERCADOS S.A. - CEARA|MATEUS SUPERMERCADOS S.A. - GOIAS|MATEUS SUPERMERCADOS S.A. - MIX BABACULANDIA|MATEUS SUPERMERCADOS S.A. - MIX BACURI|MATEUS SUPERMERCADOS S.A. - MIX ITZ|POSTERUS SUPERMERCADOS LTDA ITAPECURU|RUANNA SUPERMERCADOS LTDA|POSTERUS SUPERMERCADOS LAGO DA PEDRA LTDA|SUPERMERCADO 3 L CASA DO ARROZ|MATEUS SUPERMERCADOS S A SUPER MAIOBAO|MATEUS SUPERMERCADOS SA - MIX PEDREIRAS|MATEUS SUPERMERACADOS SA - MIX PINHEIRO|MATEUS SUPERMERCADOS SA - PRES DUTRA|POSTERUS SUPERMERCADOS LTDA - ROSARIO|MATEUS SUPERMERCADOS S.A. - COHATRAC|MATEUS SUPERMERCADOS S.A. - PATIO NORTE|MATEUS SUPERMERCADOS S.A. - MIX MAIOBAO|POSTERUS SUPERMERCADOS LTDA - S J RIBAMAR|MATEUS SUPERMERCADOS S.A. - SANTA INES|MATEUS SUPERMERCADOS S.A. - MIX STA INES|CAMINO CARCARA|POSTERUS SUPERMERCADOS LTDA SANTA LUZIA|POSTERUS SUPERMERCADOS LTDA - SANTA RITA|MATEUS SUPERMERCADOS S.A. - COHAB|MATEUS SUPERMERCADOS S.A. - COHAMA|MATEUS SUPERMERCADOS S.A. - TURU-SM08|MATEUS SUPERMERCADOS S.A. - TURU-SM27|MATEUS SUPERMERCADOS S.A. - CID. OPERARIA|MATEUS SUPERMERCADOS S.A. - RIO ANIL|MATEUS SUPERMERCADOS S.A. - CALHAU|MATEUS SUPERMERCADOS S.A. - MIX TIRICAL|MATEUS SUPERMERCADOS S.A. - S. DA ILHA|MATEUS SUPERMERCADOS S.A. - MIX VINHAIS|MATEUS SUPERMERCADOS S.A. - CAJAZEIRAS|MATEUS SUPERMERCADOS S.A. - MIX JARDIM TROPICAL|MATEUS SUPERMERCADOS S.A. - BACANGA|MATEUS SUPERMERCADOS S.A. - JARDIM RENASCENCA|MATEUS SUPERMERCADOS S.A. - MIX JOAO PAULO|MATEUS SUPERMERCADOS S.A. SUPER ANIL|MATEUS SUPERMERCADOS S.A. - SUPER COHATRAC|MATEUS SUPERMERCADOS S A MIX ARACAGY|MATEUS SUPERMERCADOS S A MIX GUAJAJARAS FORQUILHA|MERCADINHO CARONE LTDA - REC VINHAIS LJ 003|MERCADINHO CARONE LTDA - A DA GUARDA LJ 005|MERCADINHO CARONE LTDA - MAIOBAO LJ 006|MERCADINHO CARONE LTDA - S CRISTOVAO LJ 004|MERCADINHO CARONE LTDA - MARANH NOVO LJ 002|MERCADINHO CARONE LTDA - ITAPIRACO LJ 001|POSTERUS SUPERMERCADOS LTDA - SAO BERNARDO|POSTERUS SUPERMERCADOS LTDA - DIVINEIA|POSTERUS SUPERMERCADOS LTDA TUTOIA|POSTERUS SUPERMERCADOS LTDA VARGEM GRANDE|POSTERUS SUPERMERCADOS VIANA|SUPERMERCADO GADELHA LTDA|POSTERUS SUPERMERCADOS LTDA ZE DOCA'.split('|');
+                    await page.waitForSelector('.cdk-overlay-pane mat-option', { timeout: 15000 }).then(async () => {
+                        await page.$$eval('.cdk-overlay-pane mat-option', el => {
+                            const listaLojas = LojasParticipantes
                             el.forEach(async mat => {
-                                const text = await mat.querySelector('span.mat-option-text').innerText;
+                                const text = await mat.innerText;
                                 listaLojas.map(loja => {
                                     return loja == text ? mat.click() : null;
                                 });
