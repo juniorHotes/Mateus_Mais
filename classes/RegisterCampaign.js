@@ -1,19 +1,7 @@
-const fs = require('fs');
-const { promisify } = require('util');
 
 class RegisterCampaign {
-    
     static async Register(page, data) {
-        const file = promisify(fs.readFile)
 
-        async function readFile() {
-            const dataFile = await file('LojasParticipantes.csv', 'UTF-8')
-            const row = dataFile.split('\r\n')
-            return row
-        }
-
-        const LojasParticipantes = await readFile()
-    
         const {
             nome_campanha,
             desc_campanha,
@@ -27,22 +15,26 @@ class RegisterCampaign {
         } = await data
 
         await page.waitForSelector("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div a")
-        .then(async () => {
-            await page.click("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div a")
-            await page.waitForTimeout(1000)
-            await page.click("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div ul mat-list-item:nth-child(3) div a")
-            await page.waitForTimeout(1000)
-            await page.click("body app-root mat-sidenav-container mat-sidenav-content div app-campaing-page mat-card div button.mat-focus-indicator.button-dark.btn-new-entity.mat-button.mat-button-base.ng-star-inserted")
-            await page.waitForTimeout(1000)
-            await page.click("#opcao-cashback div")
-            await page.waitForTimeout(1000)
-            await page.click("#nova-campanha")
-            await page.waitForTimeout(1000)
-            await page.click("#opcao-produto div")
-            await page.waitForTimeout(1000)
-            await page.click("#nova-campanha")
-            await page.waitForTimeout(1000)
-        })
+            .then(async (item) => {
+                await item.click()
+                await page.waitForTimeout(1500)
+                await page.click("body app-root mat-sidenav-container mat-sidenav div app-sidebar mat-list mat-list-item:nth-child(10) div ul mat-list-item:nth-child(3) div a")
+                await page.waitForTimeout(1500)
+                await page.waitForSelector("body app-root mat-sidenav-container mat-sidenav-content div app-campaing-page mat-card div button.mat-focus-indicator.button-dark.btn-new-entity.mat-button.mat-button-base.ng-star-inserted")
+                    .then(async (item) => {
+                        await item.click()
+                        await page.waitForTimeout(1500)
+                        await page.click("#opcao-cashback div")
+                        await page.waitForTimeout(1500)
+                        await page.click("#nova-campanha")
+                        await page.waitForTimeout(1500)
+                        await page.click("#opcao-produto div")
+                        await page.waitForTimeout(1500)
+                        await page.click("#nova-campanha")
+                        await page.waitForTimeout(1500)
+
+                    })
+            }).catch(err => console.error(err))
 
 
         await page.waitForSelector("input[formcontrolname='nom_campanha']")
@@ -70,31 +62,37 @@ class RegisterCampaign {
                 await page.click("[formcontrolname='cod_publico']")
                 await page.waitForTimeout(1500)
                 await page.click("div[role='listbox'] mat-option mat-pseudo-checkbox")
-    
+                await page.waitForTimeout(1000)
+                await page.click(".cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing")
 
+                await page.waitForTimeout(1500)
                 // LOJAS PARTICIPANTES
                 await page.click("[formcontrolname='cod_lojas']")
                 async function selecionarLojas() {
 
-                    await page.waitForSelector('.cdk-overlay-pane mat-option', { timeout: 15000 }).then(async () => {
-                        await page.$$eval('.cdk-overlay-pane mat-option', el => {
-                            const listaLojas = LojasParticipantes
-                            el.forEach(async mat => {
-                                const text = await mat.innerText;
-                                listaLojas.map(loja => {
-                                    return loja == text ? mat.click() : null;
-                                });
+                    await page.$$eval('.mat-select-panel-wrap div[role="listbox"] mat-option', async matOption => {
+                        console.log(matOption);
+                        const LojasParticipantes = "SUPERMERCADO MATEUS CASTANHAL|SUPERMERCADO MATEUS JARDELANDIA|MIX ATACAREJO BELEM|SUPERMERCADO MATEUS MARAMBAIA|SUPERMERCADO MATEUS MAGUARI|MIX ATACAREJO CASTANHAL|MIX ATACAREJO ABAETETUBA|MIX ATACAREJO MARITUBA|SUPERMERCADO MATEUS BARCARENA|MIX ATACAREJO PEDREIRA|MIX ATACAREJO CAPANEMA|MIX ATACAREJO COQUEIRO|MIX ATACAREJO CIDADE NOVA".split('|')
+                        console.log(LojasParticipantes);
+
+                        matOption.forEach(elem => {
+                            console.log(elem);
+                            const text = elem.innerText;
+                            LojasParticipantes.map(loja => {
+                                return loja === text ? elem.click() : null;
+
                             });
                         });
                     })
                 }
+
                 await page.waitForTimeout(2000)
                 await selecionarLojas()
                 await page.waitForTimeout(2000)
+                await page.click(".cdk-overlay-backdrop.cdk-overlay-transparent-backdrop.cdk-overlay-backdrop-showing")
 
-                await page.click("[mat-flat-button]")
-                await page.waitForTimeout(500)
-                await page.click("[mat-flat-button]")
+                // SALVAR COMO RASCUNHO 
+                await page.click('mat-sidenav-container mat-sidenav-content div app-product-edit-page mat-card mat-card-subtitle div.ng-star-inserted div button.mat-focus-indicator.iz-button-in.btn-rascunho.mat-stroked-button.mat-button-base')
 
                 return
 

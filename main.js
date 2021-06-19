@@ -34,16 +34,24 @@ async function main() {
     //#region Abrir Navegador
     const browser = await puppeteer.launch({ headless: false });
     const page = await browser.newPage();
+    await page.setViewport({
+        width: 1920,
+        height: 1080,
+        deviceScaleFactor: 1,
+    });
     await page.goto('https://mateus.izio.com.br/login')
     page.setDefaultNavigationTimeout(60000)
     //#endregion Abrir Navegador
 
     //#region LOGIN
-    await page.type('[formcontrolname="des_username"]', 'joao.rodrigues')
-    await page.waitForTimeout(2000)
-    await page.type('[formcontrolname="des_senha"]', 'senhasenha')
-    await page.waitForTimeout(2000)
-    await page.click('button[type="submit"]')
+    page.waitForSelector('[formcontrolname="des_username"]')
+        .then(async () => {
+            await page.type('[formcontrolname="des_username"]', 'joao.rodrigues')
+            await page.waitForTimeout(2000)
+            await page.type('[formcontrolname="des_senha"]', 'senhasenha')
+            await page.waitForTimeout(2000)
+            await page.click('button[type="submit"]')
+        }).catch(err => console.error('Elemento não encontrado: ' + '[formcontrolname="des_username"]'))
     //#endregion LOGIN
 
     const dataCampanha = {
@@ -67,61 +75,29 @@ async function main() {
     const produtos = dataFile
 
     async function restart() {
-        const snakModal = await page.$('mat-dialog-container.mat-dialog-container')
-
-        if (snakModal != null) {
-            const msg = await page.$eval('.cdk-visually-hidden[aria-atomic="true"][aria-live="assertive"]', text => text.innerText)
-
-            if (msg == 'Para editar os itens a campanha deve estar como rascunho ou falha na ativação') {
-                await page.click('app-new-product mat-dialog-content div button:nth-child(2)')
-                console.log(msg)
-            }
-        }
-        await page.waitForTimeout(1500)
         // Verificar se o produto já foi salvo
         const isModal = await page.$('div.cdk-overlay-container div.cdk-global-overlay-wrapper div.cdk-overlay-pane.iz-modal.modal-sm')
 
-        if (isModal == null) {
+        if (isModal === null) {
+            console.log('Modal é nulo');
             index++
+            console.log(index + ' Valor do index');
+            console.log(produtos.length + ' Valor do index');
+
             if (index <= produtos.length - 1) {
                 console.log("PRODUTO CADASTRADO")
+                await page.waitForTimeout(1000)
+                await page.click("campaign-management-product-list div div button#button-produto")
                 await start()
             } else {
-                const cadastrados = await page.$$eval('div.mat-expansion-panel-content.ng-trigger.ng-trigger-bodyExpansion div.mat-expansion-panel-body div div div.body-col-ean span', span =>
-                    span.map(ean => ean.innerHTML.split(' ')[1])
-                )
-                cadastrados.map((item) => {
-                    return produtos.filter((cad, idx) => {
-                        const ean = cad[0]
-
-                        if (ean == item)
-                            return produtos.splice(idx, 1)
-                    })
-
-
-                })
-
-                if (produtos.length == 0) {
+                if (produtos.length === index) {
                     console.log(`
                     ##################################
                     ##################################
                     ###### PRODUTOS CADASTRADOS ######
                     ##################################
                     ##################################`)
-
-                    console.log(`${cadastrados.length} PRODUTOS CADASTRADOS`)
-
                     return
-                }
-                else {
-                    index = 0
-                    console.log(`
-                    ##################################
-                    ##################################
-                    ####### REVISANDO PRODUTOS #######
-                    ##################################
-                    ##################################`)
-                    await start()
                 }
             }
         } else {
@@ -139,8 +115,8 @@ async function main() {
         console.log("CADASTRANDO NOVO PRODUTO...")
         console.table({ index: index, EAN: produto[0] });
 
-        await page.waitForSelector("campaign-management-product-list div.tab-title.ng-star-inserted div button")
-            .then(async () => await page.click("campaign-management-product-list div.tab-title.ng-star-inserted div button"))
+        await page.waitForSelector("campaign-management-product-list div div button#button-produto")
+            .then(async (item) => await item.click())
 
         await page.waitForSelector('div.cdk-overlay-container div.cdk-global-overlay-wrapper div.cdk-overlay-pane.iz-modal.modal-sm')
             .then(async () => {
@@ -151,7 +127,7 @@ async function main() {
                 ])
 
                 await fileChooser.accept([`./img_mateus.jpeg`])
-                    
+
                 await page.waitForTimeout(2000)
                 // Nome do produto
                 await page.type("[formcontrolname='des_ean_plu']", produto[1])
