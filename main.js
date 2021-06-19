@@ -79,10 +79,9 @@ async function main() {
         const isModal = await page.$('div.cdk-overlay-container div.cdk-global-overlay-wrapper div.cdk-overlay-pane.iz-modal.modal-sm')
 
         if (isModal === null) {
-            console.log('Modal é nulo');
             index++
             console.log(index + ' Valor do index');
-            console.log(produtos.length + ' Valor do index');
+            console.log(`${index} de ${produtos.length} produtos cadastrados`);
 
             if (index <= produtos.length - 1) {
                 console.log("PRODUTO CADASTRADO")
