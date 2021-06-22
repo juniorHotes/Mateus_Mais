@@ -10,7 +10,7 @@ async function main() {
     const file = promisify(fs.readFile)
 
     async function readFile() {
-        const dataFile = await file('Campanha Normal.csv', 'UTF-8')
+        const dataFile = await file('CAMPANHA.csv', 'UTF-8')
         const row = dataFile.split('\r\n')
         const col = row.map(item => {
             const column = item.split(';')
